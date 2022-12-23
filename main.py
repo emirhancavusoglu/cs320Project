@@ -13,31 +13,31 @@ headers = {
 }
 bitcoin = { 'symbol': 'BTC', 'convert': 'USD'}
 ethereum = { 'symbol': 'ETH', 'convert': 'USD'}
-tether = { 'symbol': 'USDT', 'convert': 'USD'}
 bnb = { 'symbol': 'BNB', 'convert': 'USD'}
 xrp = { 'symbol': 'XRP', 'convert': 'USD'}
 dogecoin = { 'symbol': 'DOGE', 'convert': 'USD'}
 cardano = { 'symbol': 'ADA', 'convert': 'USD'}
 litecoin = { 'symbol': 'LTC', 'convert': 'USD'}
-polygon = { 'symbol': 'MATIC', 'convert': 'USD'}
 solana = { 'symbol': 'SOL', 'convert': 'USD'}
 shiba = { 'symbol': 'SHIB', 'convert': 'USD'}
-dai = { 'symbol': 'DAI', 'convert': 'USD'}
 polkadot = { 'symbol': 'DOT', 'convert': 'USD'}
-tron = { 'symbol': 'TRX', 'convert': 'USD'}
-uniswap = { 'symbol': 'UNI', 'convert': 'USD'}
 
 coins = []
+
+parameters = {
+  'symbol': 'BTC,ETH,BNB,XRP,DOGE,ADA,LTC,SOL,SHIB,DOT'
+}
 
 session = Session()
 session.headers.update(headers)
 
 try:
-  response = session.get(url, params = bitcoin)
+  response = session.get(url, params=parameters)
+  #response2 = session.get(url, params=ethereum)
 
 
-  data = json.loads(response.text)['data']['1']['quote']['USD']['price']
-  #data2 = json.loads(response2.text)['data']['1839']['quote']['USD']['price']
+  data = json.loads(response.text)['data']
+  #data2 = json.loads(response2.text)['data']
 
   print("Enter the value that you want to enter share")
   miktar = int(input())
@@ -46,8 +46,8 @@ try:
     share = int(input())
     coins.insert(ix, share)
 
-  for i in coins :
-    if (i==1):
+  for i in coins:
+    if (i == 1):
       print(data)
 
 
