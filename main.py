@@ -1,5 +1,4 @@
 import tkinter
-
 import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import ttk
@@ -10,6 +9,20 @@ import os
 import self as self
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
+import pprint
+import os
+import csv
+
+
+def red_green(amount):
+    if amount >= 0:
+        return "green"
+    else:
+        return "red"
+
 
 root = Tk()
 root.title("Split Portfolio")
@@ -56,7 +69,7 @@ def continue_adding():
 add_btn = Button(root, text='ADD', height=3, width=20, command=continue_adding)
 add_btn.place(relx=0.5, rely=0.50, anchor=CENTER)
 
-
+new_currency=[]
 def open_Shares_Page():
     shares_page = Toplevel(root)
     shares_page.title("Split Portfolio")
@@ -116,70 +129,79 @@ def transform(currency):
             new_currency.append("Polkadot")
     return new_currency
 
+pp = pprint.PrettyPrinter(indent=4)
 
-root.mainloop()
+# This creates a long string of all the top 100 crypto currency symbols.
+symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
+                      'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
+                      'MIOTA,BTT,CRO,BUSD,FTT,AAVE,BSV,XTZ,ATOM,NEO,AVAX,ALGO',
+                      'CAKE,HT,EGLD,XEM,KSM,BTCB,DAI,HOT,CHZ,DASH,HBAR,RUNE,MKR,ZEC',
+                      'ENJ,DCR,MKR,ETC,GRT,COMP,STX,NEAR,SNX,ZIL,BAT,LEO,SUSHI',
+                      'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
+                      'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
+                      'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
 
-url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest'
-<<<<<<< HEAD
+# Makes symbolstr into a list for later for loop
+symbol_list = symbolstr.split(',')
+key = os.environ.get('')
 
-parameters = {'slug': 'bitcoin', 'convert': 'USD'}
-
-=======
->>>>>>> 0b6249a5e68a1c4c62ee3ac4d1ec1ca8e5353376
+url = f'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+print(url)
 headers = {
     'Accepts': 'application/json',
-    'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278',
+    'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278'
 }
-bitcoin = { 'symbol': 'BTC', 'convert': 'USD'}
-ethereum = { 'symbol': 'ETH', 'convert': 'USD'}
-bnb = { 'symbol': 'BNB', 'convert': 'USD'}
-xrp = { 'symbol': 'XRP', 'convert': 'USD'}
-dogecoin = { 'symbol': 'DOGE', 'convert': 'USD'}
-cardano = { 'symbol': 'ADA', 'convert': 'USD'}
-litecoin = { 'symbol': 'LTC', 'convert': 'USD'}
-solana = { 'symbol': 'SOL', 'convert': 'USD'}
-shiba = { 'symbol': 'SHIB', 'convert': 'USD'}
-polkadot = { 'symbol': 'DOT', 'convert': 'USD'}
-
-coins = []
-
 parameters = {
-  'symbol': 'BTC,ETH,BNB,XRP,DOGE,ADA,LTC,SOL,SHIB,DOT'
+    'symbol': symbolstr
 }
-
 session = Session()
 session.headers.update(headers)
 
-<<<<<<< HEAD
-# try:
-# response = session.get(url, params=parameters)
-# data = json.loads(response.text)['data']['1']['quote']['USD']['price']
-# print(data)
-
-
-# except (ConnectionError, Timeout, TooManyRedirects) as e:
-# print(e)
-=======
 try:
-  response = session.get(url, params=parameters)
-  #response2 = session.get(url, params=ethereum)
+    response = session.get(url, params=parameters)
+    data = json.loads(response.text)['data']
 
+    row_count = 1
+    count = 0
+    for i in new_currency:
+        current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
-  data = json.loads(response.text)['data']
-  #data2 = json.loads(response2.text)['data']
+        print(data[i]['name'])
+        print("${0:.2f}".format(float(data[i]['quote']['USD']['price'])))
+        print("Rank: {0:.0f}".format(float(data[i]['cmc_rank'])))
+        print("Current Value: ${0:.2f}".format(float(current_value)))
 
-  print("Enter the value that you want to enter share")
-  miktar = int(input())
+        name = Label(root, text=data[data[i]['name']], bg="white")
+        name.grid(row=row_count, column=0, sticky=N + S + E + W)
 
-  for ix in range(miktar):
-    share = int(input())
-    coins.insert(ix, share)
+        rank = Label(root, text=data[data[i]['cmc_rank']], bg="silver")
+        rank.grid(row=row_count, column=1, sticky=N + S + E + W)
 
-  for i in coins:
-    if (i == 1):
-      print(data)
+        current_price = Label(root, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
+        current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
 
+        one_hr_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
+                              bg="silver",
+                              fg=red_green(float(data[i]['quote']['USD']["percent_change_60d"])))
+        one_hr_change.grid(row=row_count, column=5, sticky=N + S + E + W)
 
+        tf_hr_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_24h'])),
+                             bg="white",
+                             fg=red_green(float(data[i]['quote']['USD']["percent_change_24H"])))
+        tf_hr_change.grid(row=row_count, column=6, sticky=N + S + E + W)
+
+        seven_day_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_7d'])),
+                                 bg="silver",
+                                 fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
+        seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
+
+        current_value = Label(root, text="${0:.2f}".format(float(current_value)), bg="white")
+        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
+
+        row_count += 1
+        count+=1
+
+    root.mainloop()
 except (ConnectionError, Timeout, TooManyRedirects) as e:
-  print(e)
->>>>>>> 0b6249a5e68a1c4c62ee3ac4d1ec1ca8e5353376
+    data = json.loads(response.text)
+
