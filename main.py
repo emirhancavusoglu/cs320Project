@@ -108,14 +108,14 @@ def open_Shares_Page():
     header_current_value = Label(shares_page, text="Current Value", bg="silver", width=13, font="Verdana 8 bold")
     header_current_value.place(x=690,y=400)
 
-    symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
+    symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,SHIB,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
                           'MIOTA,BTT,CRO,BUSD,FTT,AAVE,BSV,XTZ,ATOM,NEO,AVAX,ALGO',
                           'CAKE,HT,EGLD,XEM,KSM,BTCB,DAI,HOT,CHZ,DASH,HBAR,RUNE,MKR,ZEC',
                           'ENJ,DCR,MKR,ETC,GRT,COMP,STX,NEAR,SNX,ZIL,BAT,LEO,SUSHI',
                           'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
                           'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
-                          'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX,SHIB'))
+                          'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
 
 
     symbol_list = symbolstr.split(',')
@@ -245,15 +245,46 @@ def open_Shares_Page():
     update_button.place(x=480, y=365)
 
     def don2(event=None):
+        count = 0
         xx = Comboc.current()
-        if xx == 0:
-            current_price["text"]="$ {0:.2f}".format(float(data[i]['quote']['USD']['price']))
-        if xx == 1:
-            current_price["text"] = "€ {0:.2f}".format(float(data[i]['quote']['USD']['price'])*0.97)
-        if xx == 2:
-            current_price["text"] = "₺ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 18.67)
-        if xx == 3:
-            current_price["text"] = "£ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 0.83)
+        column_count_value2 = 419.50
+        for i in new_currency:
+            if xx == 0:
+                values = float(data[i]['quote']['USD']['price'])
+                current_price = Label(shares_page, text="$ {0:.2f}".format(values),
+                                      width=15,
+                                      bg="white", )
+                current_price.place(x=205, y=column_count_value2)
+                current_value = Label(shares_page, text="$ {0:.2f}".format(float(amount[count]) * values), width=15, bg="silver")
+                current_value.place(x=690, y=column_count_value2)
+            if xx == 1:
+                values = float(data[i]['quote']['USD']['price'])
+                current_price = Label(shares_page, text="€ {0:.2f}".format(float(data[i]['quote']['USD']['price'])*0.97),
+                                      width=15,
+                                      bg="white", )
+                current_price.place(x=205, y=column_count_value2)
+                current_value = Label(shares_page, text="€ {0:.2f}".format(float(amount[count]) * values*0.97), width=15, bg="silver")
+                current_value.place(x=690, y=column_count_value2)
+            if xx == 2:
+                values = float(data[i]['quote']['USD']['price'])
+                current_price = Label(shares_page,
+                                      text="₺ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 18.67),
+                                      width=15,
+                                      bg="white", )
+                current_price.place(x=205, y=column_count_value2)
+                current_value = Label(shares_page, text="₺ {0:.2f}".format(float(amount[count]) * values*18.67), width=15, bg="silver")
+                current_value.place(x=690, y=column_count_value2)
+            if xx == 3:
+                values = float(data[i]['quote']['USD']['price'])
+                current_price = Label(shares_page,
+                                      text="£ {0:.2f}".format(values * 0.83),
+                                      width=15,
+                                      bg="white", )
+                current_price.place(x=205, y=column_count_value2)
+                current_value = Label(shares_page, text="£ {0:.2f}".format((float(amount[count]) * values*0.83)), width=15, bg="silver")
+                current_value.place(x=690, y=column_count_value2)
+            column_count_value2 += 20
+            count += 1
 
     currList = ["USD", "EUR", "TRY", "GBP"]
     Comboc = ttk.Combobox(shares_page, state="readonly", width= 5, values=currList)
