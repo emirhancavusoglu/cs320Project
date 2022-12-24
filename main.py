@@ -184,23 +184,24 @@ def open_Shares_Page():
 
         pie_button = Button(shares_page, text="Pie Chart", command=showpi)
         pie_button.grid(row=15, column=15, sticky=E + S, padx=10, pady=10)
+
         def showFuturePrice():
             global futurePrice
             futurePanel = Toplevel(root)
             futurePanel.title("Estimated Future Price")
             futurePanel.geometry("400x400")
             futurePanel.resizable(width=False, height=False)
-            hss = Label(futurePanel, text="Estimated Future Price", bg="white", font="Verdana 8 bold")
+            hss = Label(futurePanel, text="Estimated Future Prices", bg="silver", width=50, font="Verdana 8 bold")
             hss.grid(row=0, column=0, sticky=N + S + E + W)
 
-            fp_name = Label(futurePanel, text="Name", bg="white", width=8, font="Verdana 8 bold")
+            fp_name = Label(futurePanel, text="Name", bg="white", width=10, font="Verdana 8 bold")
             fp_name.place(x=0, y=35)
 
             fp_future = Label(futurePanel, text="Estimated Future Price", bg="silver", width=20, font="Verdana 8 bold")
-            fp_future.place(x=60, y=35)
+            fp_future.place(x=80, y=35)
 
-            fp_current = Label(futurePanel, text="Current Price ", bg="white", width=15, font="Verdana 8 bold")
-            fp_current.place(x=180, y=35)
+            fp_current = Label(futurePanel, text="Current Price ", bg="white", width=20, font="Verdana 8 bold")
+            fp_current.place(x=240, y=35)
 
             column_count_future = 60
             for i in new_currency:
@@ -210,19 +211,20 @@ def open_Shares_Page():
                 if futurePrice < 0:
                     futurePrice = 0
 
-                future_price_button_name = Label(futurePanel, text=data[i]['name'], bg="white")
+                future_price_button_name = Label(futurePanel, text=data[i]['name'], width=10, bg="white")
                 future_price_button_name.place(x=0, y=column_count_future)
 
-                future_price_button_price = Label(futurePanel, text=futurePrice, bg="white", font="Verdana 8 bold")
-                future_price_button_price.place(x=60, y=column_count_future)
+                future_price_button_price = Label(futurePanel, text="${0:.2f}".format(float(futurePrice)), width=20,
+                                                  bg="silver", font="Verdana 8 bold")
+                future_price_button_price.place(x=80, y=column_count_future)
 
-                price_button_price = Label(futurePanel, text=float(data[i]['quote']['USD']['price']), bg="white",
-                                           font="Verdana 8 bold")
-                price_button_price.place(x=180, y=column_count_future)
+                price_button_price = Label(futurePanel, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])),
+                                           width=20, bg="white", font="Verdana 8 bold")
+                price_button_price.place(x=240, y=column_count_future)
                 column_count_future += 20
 
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
-    future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10,pady = 10)
+    future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10, pady=10)
 
     def showNews(event=None):
         webview.create_window('Coin News', 'https://coinmarketcap.com/headlines/news/')
