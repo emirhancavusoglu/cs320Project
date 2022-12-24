@@ -1,23 +1,10 @@
-import tkinter
-from datetime import datetime
 
-import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import ttk
-import numpy as np
-import requests
+from requests import Request, Session
 import json
 import os
-import self as self
-from requests import Request, Session
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-from requests import Request, Session
-from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-import json
-import pprint
-import os
-import csv
-import pandas as pd
+
 
 def red_green(amount):
     if amount >= 0:
@@ -60,24 +47,15 @@ amount = []
 
 
 def continue_adding():
-<<<<<<< HEAD
     currency_toIn = Combo.current()
-=======
-    currency_toIn= Combo.current()
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
     if currency_toIn in currency:
         index = currency.index(currency_toIn)
         print("Already in")
         if len(en2.get()) == 0:
             print("sa")
         else:
-<<<<<<< HEAD
             sum = int(en2.get()) + amount[index]
             amount[index] = sum;
-=======
-            sum = int(en2.get())+amount[index]
-            amount[index]= sum
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
             print(currency, amount)
             Combo.set("")
             en2.delete(0, END)
@@ -90,10 +68,7 @@ def continue_adding():
             print(currency, amount)
             Combo.set("")
             en2.delete(0, END)
-<<<<<<< HEAD
 
-=======
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
 
 
 # Add Button
@@ -125,7 +100,6 @@ def open_Shares_Page():
     header_24_hr_change = Label(shares_page, text="24 HR Change", bg="white", width=12, font="Verdana 8 bold")
     header_24_hr_change.place(x=410,y=400)
 
-<<<<<<< HEAD
     header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", width=12, font="Verdana 8 bold")
     header_7_day_change.place(x=510,y=400)
 
@@ -134,13 +108,6 @@ def open_Shares_Page():
 
     header_current_value = Label(shares_page, text="Current Value", bg="silver", width=13, font="Verdana 8 bold")
     header_current_value.place(x=690,y=400)
-=======
-    header_amount=Label(shares_page,text="Amount",bg="white", font="Verdana 8 bold")
-    header_amount.grid(row=0, column=8, sticky=N + S + E + W)
-
-    header_current_value = Label(shares_page, text="Current Value", bg="silver", font="Verdana 8 bold")
-    header_current_value.grid(row=0, column=9, sticky=N + S + E + W)
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
 
     symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
@@ -176,10 +143,7 @@ def open_Shares_Page():
 
     for i in new_currency:
 
-<<<<<<< HEAD
         x = 0
-=======
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
 
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
@@ -207,16 +171,12 @@ def open_Shares_Page():
                                      fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
         seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
 
-        amountLabel = Label(shares_page,text="{0:.2f}".format(amount[count]), bg="white")
-        amountLabel.grid(row=row_count,column=8,sticky=N + S + E + W)
-
-        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="silver")
-        current_value.grid(row=row_count, column=9, sticky=N + S + E + W)
+        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="white")
+        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
 
         row_count += 1
         count += 1
 
-<<<<<<< HEAD
         def showFuturePrice():
             global futurePrice
             futurePanel = Toplevel(root)
@@ -244,8 +204,6 @@ def open_Shares_Page():
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
     future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10,pady = 10)
 
-=======
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
     def don(event=None):
         shares_page.destroy()
         open_Shares_Page()
@@ -254,11 +212,6 @@ def open_Shares_Page():
     update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
 
 
-<<<<<<< HEAD
-=======
-    #update_button = Button(self.root, text="Update", command=)
-    #update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
 continue_btn.place(relx=0.5, rely=0.65, anchor=CENTER)
@@ -289,8 +242,4 @@ def transform(currency):
             new_currency.append("DOT")
     return new_currency
 
-<<<<<<< HEAD
 root.mainloop()
-=======
-root.mainloop()
->>>>>>> 43cb22e35ee48cb0e40138388cf801f51258bab4
