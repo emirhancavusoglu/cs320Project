@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+from matplotlib import pyplot as plt
+import numpy as np
 from requests import Request, Session
 import json
 import os
@@ -85,7 +87,6 @@ def open_Shares_Page():
     header_name = Label(shares_page, text="Name", bg="white", width= 15, font="Verdana 8 bold")
     header_name.place(x=0,y=400)
 
-
     header_rank = Label(shares_page, text="Rank", bg="silver", width= 10, font="Verdana 8 bold")
     header_rank.place(x=120,y=400)
 
@@ -151,8 +152,8 @@ def open_Shares_Page():
         rank = Label(shares_page, text=data[i]['cmc_rank'], width= 11, bg="silver")
         rank.place(x=120.1,y=419.45)
 
-        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
-        current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
+        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), width= 11, bg="white", )
+        current_price.place(x=200.1,y=419.45)
 
         one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
                               bg="silver",
@@ -175,6 +176,14 @@ def open_Shares_Page():
         row_count += 1
         count += 1
 
+        # Creating dataset
+        def showpi():
+
+            plt.pie(amount, labels=new_currency, autopct='%1.1f%%')
+            plt.show()
+
+        pie_button = Button(shares_page, text="Pie Chart", command=showpi)
+        pie_button.grid(row=15, column=15, sticky=E + S, padx=10, pady=10)
         def showFuturePrice():
             global futurePrice
             futurePanel = Toplevel(root)
@@ -232,7 +241,17 @@ def open_Shares_Page():
     Comboc = ttk.Combobox(shares_page, state="readonly", values=currList)
     Comboc.set("USD")
     Comboc.place(x=550, y=120)
+    if Comboc.current(0):
+        current_price.config(float(data[i]['quote']['USD']['price']))
+    if Comboc.current(1):
+        current_price.config(float(data[i]['quote']['USD']['price'])*0.97)
+    if Comboc.current(2):
+        current_price.config(float(data[i]['quote']['USD']['price'])*18.67)
+    if Comboc.current(3):
+        current_price.config(float(data[i]['quote']['USD']['price'])*0.83)
 
+    update_curr = Button(shares_page, text="Update Prices", command=don)
+    update_curr.place(x=650,y =120)
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
