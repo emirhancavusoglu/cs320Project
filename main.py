@@ -3,6 +3,7 @@ from tkinter import ttk
 from requests import Request, Session
 import json
 import os
+import webview
 
 def red_green(amount):
     if amount >= 0:
@@ -123,7 +124,7 @@ def open_Shares_Page():
     print(url)
     headers = {
         'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '698e8ff5-6293-4eac-a0f3-b8df83d683e9'
+        'X-CMC_PRO_API_KEY': '05c3873e-16e1-4a7c-8b31-3947cce36f62'
     }
     parameters = {
         'symbol': symbolstr
@@ -144,11 +145,11 @@ def open_Shares_Page():
 
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
-        name = Label(shares_page, text=data[i]['name'], bg="white")
-        name.place(x=0,y=410)
+        name = Label(shares_page, text=data[i]['name'], bg="white", width= 16)
+        name.place(x=0,y=419.45)
 
-        rank = Label(shares_page, text=data[i]['cmc_rank'], bg="silver")
-        rank.grid(row=row_count, column=1, sticky=N + S + E + W)
+        rank = Label(shares_page, text=data[i]['cmc_rank'], width= 11, bg="silver")
+        rank.place(x=120.1,y=419.45)
 
         current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
         current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
@@ -182,11 +183,21 @@ def open_Shares_Page():
             futurePanel.resizable(width=False, height=False)
             hss = Label(futurePanel, text="Estimated Future Price", bg="white", font="Verdana 8 bold")
             hss.grid(row=0, column=0, sticky=N + S + E + W)
-            column_count_future = 15
+
+            fp_name = Label(futurePanel, text="Name", bg="white", width=8, font="Verdana 8 bold")
+            fp_name.place(x=0, y=35)
+
+            fp_future = Label(futurePanel, text="Estimated Future Price", bg="silver", width=20, font="Verdana 8 bold")
+            fp_future.place(x=60, y=35)
+
+            fp_current = Label(futurePanel, text="Current Price ", bg="white", width=15, font="Verdana 8 bold")
+            fp_current.place(x=180, y=35)
+
+            column_count_future = 60
             for i in new_currency:
-                futurePrice = float(data[i]['quote']['USD']['price']) + (float(data[i]['quote']['USD']['price']) *
-                                                                         (float(data[i]['quote']['USD']['percent_change_7d']) +
-                                                                          float(data[i]['quote']['USD']["percent_change_24h"]))/2)
+                futurePrice = float(data[i]['quote']['USD']['price']) * (
+                        float(data[i]['quote']['USD']['percent_change_7d']) - float(
+                    data[i]['quote']['USD']["percent_change_24h"]))
                 if futurePrice < 0:
                     futurePrice = 0
 
@@ -195,11 +206,21 @@ def open_Shares_Page():
 
                 future_price_button_price = Label(futurePanel, text=futurePrice, bg="white", font="Verdana 8 bold")
                 future_price_button_price.place(x=60, y=column_count_future)
+
+                price_button_price = Label(futurePanel, text=float(data[i]['quote']['USD']['price']), bg="white",
+                                           font="Verdana 8 bold")
+                price_button_price.place(x=180, y=column_count_future)
                 column_count_future += 20
 
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
     future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10,pady = 10)
 
+    def showNews(event=None):
+        webview.create_window('Coin News', 'https://coinmarketcap.com/headlines/news/')
+        webview.start()
+
+    showsNews_button = Button(shares_page, text="Show News", command=showNews)
+    showsNews_button.grid(row=row_count, column=10, sticky=E + S, padx=10, pady=10)
     def don(event=None):
         shares_page.destroy()
         open_Shares_Page()
@@ -207,10 +228,16 @@ def open_Shares_Page():
     update_button = Button(shares_page, text="Update Prices", command=don)
     update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
 
+    currList = ["USD", "EUR", "TRY", "GBP"]
+    Comboc = ttk.Combobox(shares_page, state="readonly", values=currList)
+    Comboc.set("USD")
+    Comboc.place(x=550, y=120)
+
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
 continue_btn.place(relx=0.5, rely=0.65, anchor=CENTER)
+
 
 
 def transform(currency):
