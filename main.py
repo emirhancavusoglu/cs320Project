@@ -181,7 +181,11 @@ def open_Shares_Page():
         row_count += 1
         count += 1
 
-    update_button = Button(shares_page, text="Update Prices", command=open_Shares_Page)
+    def don(event=None):
+        shares_page.destroy()
+        open_Shares_Page()
+
+    update_button = Button(shares_page, text="Update Prices", command=don)
     update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
 
 
