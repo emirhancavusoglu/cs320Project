@@ -4,6 +4,7 @@ from tkinter import ttk
 from requests import Request, Session
 import json
 import os
+import webview
 
 
 def red_green(amount):
@@ -126,7 +127,7 @@ def open_Shares_Page():
     print(url)
     headers = {
         'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '698e8ff5-6293-4eac-a0f3-b8df83d683e9'
+        'X-CMC_PRO_API_KEY': '05c3873e-16e1-4a7c-8b31-3947cce36f62'
     }
     parameters = {
         'symbol': symbolstr
@@ -153,7 +154,7 @@ def open_Shares_Page():
         rank = Label(shares_page, text=data[i]['cmc_rank'], bg="silver")
         rank.grid(row=row_count, column=1, sticky=N + S + E + W)
 
-        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
+        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white",)
         current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
 
         one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
@@ -203,6 +204,12 @@ def open_Shares_Page():
 
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
     future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10,pady = 10)
+    def showNews(event=None):
+        webview.create_window('Coin News', 'https://coinmarketcap.com/headlines/news/')
+        webview.start()
+
+    showsNews_button = Button(shares_page, text="Show News", command=showNews)
+    showsNews_button.grid(row=row_count, column=10, sticky=E + S, padx=10, pady=10)
 
     def don(event=None):
         shares_page.destroy()
