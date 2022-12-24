@@ -58,14 +58,27 @@ amount = []
 
 
 def continue_adding():
-    currency.append(Combo.current())
-    if len(en2.get()) == 0:
-        amount.append('0')
+    currency_toIn= Combo.current()
+    if currency_toIn in currency:
+        index = currency.index(currency_toIn)
+        print("Already in")
+        if len(en2.get()) == 0:
+            print("sa")
+        else:
+            sum = int(en2.get())+amount[index]
+            amount[index]= sum;
+            print(currency, amount)
+            Combo.set("")
+            en2.delete(0, END)
     else:
-        amount.append(int(en2.get()))
-        print(currency, amount)
-        Combo.set("")
-        en2.delete(0, END)
+        currency.append(currency_toIn)
+        if len(en2.get()) == 0:
+            amount.append('0')
+        else:
+            amount.append(int(en2.get()))
+            print(currency, amount)
+            Combo.set("")
+            en2.delete(0, END)
 
 
 # Add Button
@@ -202,5 +215,3 @@ def transform(currency):
     return new_currency
 
 root.mainloop()
-#tugberk
-#cil
