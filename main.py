@@ -1,4 +1,6 @@
 import tkinter
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import ttk
@@ -15,7 +17,7 @@ import json
 import pprint
 import os
 import csv
-
+import pandas as pd
 
 def red_green(amount):
     if amount >= 0:
@@ -58,14 +60,28 @@ amount = []
 
 
 def continue_adding():
-    currency.append(Combo.current())
-    if len(en2.get()) == 0:
-        amount.append('0')
+    currency_toIn = Combo.current()
+    if currency_toIn in currency:
+        index = currency.index(currency_toIn)
+        print("Already in")
+        if len(en2.get()) == 0:
+            print("sa")
+        else:
+            sum = int(en2.get()) + amount[index]
+            amount[index] = sum;
+            print(currency, amount)
+            Combo.set("")
+            en2.delete(0, END)
     else:
-        amount.append(int(en2.get()))
-        print(currency, amount)
-        Combo.set("")
-        en2.delete(0, END)
+        currency.append(currency_toIn)
+        if len(en2.get()) == 0:
+            amount.append('0')
+        else:
+            amount.append(int(en2.get()))
+            print(currency, amount)
+            Combo.set("")
+            en2.delete(0, END)
+
 
 
 # Add Button
@@ -81,26 +97,30 @@ def open_Shares_Page():
     new_currency = transform(currency)
     print(new_currency)
 
-    header_name = Label(shares_page, text="Name", bg="white", font="Verdana 8 bold")
-    header_name.grid(row=0, column=0, sticky=N + S + E + W)
+    header_name = Label(shares_page, text="Name", bg="white", width= 15, font="Verdana 8 bold")
+    header_name.place(x=0,y=400)
 
-    header_rank = Label(shares_page, text="Rank", bg="silver", font="Verdana 8 bold")
-    header_rank.grid(row=0, column=1, sticky=N + S + E + W)
 
-    header_current_price = Label(shares_page, text="Current Price", bg="white", font="Verdana 8 bold")
-    header_current_price.grid(row=0, column=2, sticky=N + S + E + W)
+    header_rank = Label(shares_page, text="Rank", bg="silver", width= 10, font="Verdana 8 bold")
+    header_rank.place(x=120,y=400)
 
-    header_1_hr_change = Label(shares_page, text="1 HR Change", bg="silver", font="Verdana 8 bold")
-    header_1_hr_change.grid(row=0, column=5, sticky=N + S + E + W)
+    header_current_price = Label(shares_page, text="Current Price", bg="white", width=13, font="Verdana 8 bold")
+    header_current_price.place(x=205,y=400)
 
-    header_24_hr_change = Label(shares_page, text="24 HR Change", bg="white", font="Verdana 8 bold")
-    header_24_hr_change.grid(row=0, column=6, sticky=N + S + E + W)
+    header_1_hr_change = Label(shares_page, text="1 HR Change", bg="silver", width=12, font="Verdana 8 bold")
+    header_1_hr_change.place(x=315,y=400)
 
-    header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", font="Verdana 8 bold")
-    header_7_day_change.grid(row=0, column=7, sticky=N + S + E + W)
+    header_24_hr_change = Label(shares_page, text="24 HR Change", bg="white", width=12, font="Verdana 8 bold")
+    header_24_hr_change.place(x=410,y=400)
 
-    header_current_value = Label(shares_page, text="Current Value", bg="white", font="Verdana 8 bold")
-    header_current_value.grid(row=0, column=8, sticky=N + S + E + W)
+    header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", width=12, font="Verdana 8 bold")
+    header_7_day_change.place(x=510,y=400)
+
+    header_amount = Label(shares_page, text="Amount", bg="white", width= 10, font="Verdana 8 bold")
+    header_amount.place(x=610,y=400)
+
+    header_current_value = Label(shares_page, text="Current Value", bg="silver", width=13, font="Verdana 8 bold")
+    header_current_value.place(x=690,y=400)
 
     symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
@@ -136,6 +156,8 @@ def open_Shares_Page():
 
     for i in new_currency:
 
+        x = 0
+
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
         name = Label(shares_page, text=data[i]['name'], bg="white")
@@ -168,9 +190,41 @@ def open_Shares_Page():
         row_count += 1
         count += 1
 
-    data = ""
-    #update_button = Button(self.root, text="Update", command=)
-    #update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
+        def showFuturePrice():
+            global futurePrice
+            futurePanel = Toplevel(root)
+            futurePanel.title("Estimated Future Price")
+            futurePanel.geometry("400x400")
+            futurePanel.resizable(width=False, height=False)
+            hss = Label(futurePanel, text="Estimated Future Price", bg="white", font="Verdana 8 bold")
+            hss.grid(row=0, column=0, sticky=N + S + E + W)
+            row_count_future = 0
+            column_count_future = 15
+            for i in new_currency:
+                futurePrice = float(data[i]['quote']['USD']['price']) * (
+                            float(data[i]['quote']['USD']['percent_change_7d']) - float(
+                        data[i]['quote']['USD']["percent_change_24h"]))
+                if futurePrice < 0:
+                    futurePrice = 0
+
+                future_price_button_name = Label(futurePanel, text=data[i]['name'], bg="white")
+                future_price_button_name.place(x=0, y=column_count_future)
+
+                future_price_button_price = Label(futurePanel, text=futurePrice, bg="white", font="Verdana 8 bold")
+                future_price_button_price.place(x=60, y=column_count_future)
+                column_count_future += 20
+
+    future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
+    future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10,pady = 10)
+
+    def don(event=None):
+        shares_page.destroy()
+        open_Shares_Page()
+
+    update_button = Button(shares_page, text="Update Prices", command=don)
+    update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
+
+
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
 continue_btn.place(relx=0.5, rely=0.65, anchor=CENTER)
@@ -202,5 +256,3 @@ def transform(currency):
     return new_currency
 
 root.mainloop()
-#tugberk
-#cil
