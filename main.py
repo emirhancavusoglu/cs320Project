@@ -40,7 +40,7 @@ lb2 = Label(root, text="Currency", font=("arial", 12))
 lb2.place(x=135, y=118)
 
 # combobox
-currencylist = ["BTC", "ETH", "BNB", "XRP", "DogeCoin", "LightCoin", "Cardano", "Solana", "Shiba Inu", "Polkadot"]
+currencylist = ["BTC", "Ethereum", "BNB", "XRP", "DogeCoin", "LightCoin", "Cardano", "Solana", "Shiba Inu", "Polkadot"]
 Combo = ttk.Combobox(root, state="readonly", values=currencylist)
 Combo.place(x=240, y=118)
 
@@ -69,7 +69,10 @@ def continue_adding():
 add_btn = Button(root, text='ADD', height=3, width=20, command=continue_adding)
 add_btn.place(relx=0.5, rely=0.50, anchor=CENTER)
 
-new_currency=[]
+new_currency = []
+shares_page = Toplevel(root)
+
+
 def open_Shares_Page():
     shares_page = Toplevel(root)
     shares_page.title("Split Portfolio")
@@ -77,6 +80,7 @@ def open_Shares_Page():
     shares_page.resizable(width=False, height=False)
     new_currency = transform(currency)
     print(new_currency)
+
     header_name = Label(shares_page, text="Name", bg="white", font="Verdana 8 bold")
     header_name.grid(row=0, column=0, sticky=N + S + E + W)
 
@@ -98,6 +102,75 @@ def open_Shares_Page():
     header_current_value = Label(shares_page, text="Current Value", bg="white", font="Verdana 8 bold")
     header_current_value.grid(row=0, column=8, sticky=N + S + E + W)
 
+    symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
+                          'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
+                          'MIOTA,BTT,CRO,BUSD,FTT,AAVE,BSV,XTZ,ATOM,NEO,AVAX,ALGO',
+                          'CAKE,HT,EGLD,XEM,KSM,BTCB,DAI,HOT,CHZ,DASH,HBAR,RUNE,MKR,ZEC',
+                          'ENJ,DCR,MKR,ETC,GRT,COMP,STX,NEAR,SNX,ZIL,BAT,LEO,SUSHI',
+                          'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
+                          'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
+                          'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
+
+
+    symbol_list = symbolstr.split(',')
+    key = os.environ.get('')
+
+    url = f'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+    print(url)
+    headers = {
+        'Accepts': 'application/json',
+        'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278'
+    }
+    parameters = {
+        'symbol': symbolstr
+    }
+    session = Session()
+    session.headers.update(headers)
+
+
+    response = session.get(url, params=parameters)
+    data = json.loads(response.text)['data']
+
+    row_count = 1
+    count = 0
+
+    for i in new_currency:
+        current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
+
+        #print(data[i]['name'])
+        #print("${0:.2f}".format(float(data[i]['quote']['USD']['price'])))
+        #print("Rank: {0:.0f}".format(float(data[i]['cmc_rank'])))
+        #print("Current Value: ${0:.2f}".format(float(current_value)))
+
+        name = Label(shares_page, text=data[i]['name'], bg="white")
+        name.grid(row=row_count, column=0, sticky=N + S + E + W)
+
+        rank = Label(shares_page, text=data[i]['cmc_rank'], bg="silver")
+        rank.grid(row=row_count, column=1, sticky=N + S + E + W)
+
+        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
+        current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
+
+        one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
+                              bg="silver",
+                              fg=red_green(float(data[i]['quote']['USD']["percent_change_60d"])))
+        one_hr_change.grid(row=row_count, column=5, sticky=N + S + E + W)
+
+        tf_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_24h'])),
+                                 bg="white",
+                                 fg=red_green(float(data[i]['quote']['USD']["percent_change_24h"])))
+        tf_hr_change.grid(row=row_count, column=6, sticky=N + S + E + W)
+
+        seven_day_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_7d'])),
+                                     bg="silver",
+                                     fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
+        seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
+
+        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="white")
+        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
+
+        row_count += 1
+        count += 1
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
@@ -129,79 +202,4 @@ def transform(currency):
             new_currency.append("Polkadot")
     return new_currency
 
-pp = pprint.PrettyPrinter(indent=4)
-
-# This creates a long string of all the top 100 crypto currency symbols.
-symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
-                      'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
-                      'MIOTA,BTT,CRO,BUSD,FTT,AAVE,BSV,XTZ,ATOM,NEO,AVAX,ALGO',
-                      'CAKE,HT,EGLD,XEM,KSM,BTCB,DAI,HOT,CHZ,DASH,HBAR,RUNE,MKR,ZEC',
-                      'ENJ,DCR,MKR,ETC,GRT,COMP,STX,NEAR,SNX,ZIL,BAT,LEO,SUSHI',
-                      'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
-                      'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
-                      'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
-
-# Makes symbolstr into a list for later for loop
-symbol_list = symbolstr.split(',')
-key = os.environ.get('')
-
-url = f'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-print(url)
-headers = {
-    'Accepts': 'application/json',
-    'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278'
-}
-parameters = {
-    'symbol': symbolstr
-}
-session = Session()
-session.headers.update(headers)
-
-try:
-    response = session.get(url, params=parameters)
-    data = json.loads(response.text)['data']
-
-    row_count = 1
-    count = 0
-    for i in new_currency:
-        current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
-
-        print(data[i]['name'])
-        print("${0:.2f}".format(float(data[i]['quote']['USD']['price'])))
-        print("Rank: {0:.0f}".format(float(data[i]['cmc_rank'])))
-        print("Current Value: ${0:.2f}".format(float(current_value)))
-
-        name = Label(root, text=data[data[i]['name']], bg="white")
-        name.grid(row=row_count, column=0, sticky=N + S + E + W)
-
-        rank = Label(root, text=data[data[i]['cmc_rank']], bg="silver")
-        rank.grid(row=row_count, column=1, sticky=N + S + E + W)
-
-        current_price = Label(root, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), bg="white", )
-        current_price.grid(row=row_count, column=2, sticky=N + S + E + W)
-
-        one_hr_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
-                              bg="silver",
-                              fg=red_green(float(data[i]['quote']['USD']["percent_change_60d"])))
-        one_hr_change.grid(row=row_count, column=5, sticky=N + S + E + W)
-
-        tf_hr_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_24h'])),
-                             bg="white",
-                             fg=red_green(float(data[i]['quote']['USD']["percent_change_24H"])))
-        tf_hr_change.grid(row=row_count, column=6, sticky=N + S + E + W)
-
-        seven_day_change = Label(root, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_7d'])),
-                                 bg="silver",
-                                 fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
-        seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
-
-        current_value = Label(root, text="${0:.2f}".format(float(current_value)), bg="white")
-        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
-
-        row_count += 1
-        count+=1
-
-    root.mainloop()
-except (ConnectionError, Timeout, TooManyRedirects) as e:
-    data = json.loads(response.text)
-
+root.mainloop()
