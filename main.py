@@ -183,7 +183,7 @@ def open_Shares_Page():
             plt.show()
 
         pie_button = Button(shares_page, text="Pie Chart", command=showpi)
-        pie_button.grid(row=15, column=15, sticky=E + S, padx=10, pady=10)
+        pie_button.place(x=260, y=365)
 
         def showFuturePrice():
             global futurePrice
@@ -224,36 +224,39 @@ def open_Shares_Page():
                 column_count_future += 20
 
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
-    future_price_button.grid(row=row_count + 1, column=9, sticky=E + S, padx=10, pady=10)
+    future_price_button.place(x=15, y=365)
 
     def showNews(event=None):
         webview.create_window('Coin News', 'https://coinmarketcap.com/headlines/news/')
         webview.start()
 
     showsNews_button = Button(shares_page, text="Show News", command=showNews)
-    showsNews_button.grid(row=row_count, column=10, sticky=E + S, padx=10, pady=10)
+    showsNews_button.place(x=165, y=365)
     def don(event=None):
         shares_page.destroy()
         open_Shares_Page()
 
     update_button = Button(shares_page, text="Update Prices", command=don)
-    update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
+    update_button.place(x=380, y=365)
+
+    def don2(event=None):
+        xx = Comboc.current()
+        if xx == 0:
+            current_price["text"]="$ {0:.2f}".format(float(data[i]['quote']['USD']['price']))
+        if xx == 1:
+            current_price["text"] = "€ {0:.2f}".format(float(data[i]['quote']['USD']['price'])*0.97)
+        if xx == 2:
+            current_price["text"] = "₺ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 18.67)
+        if xx == 3:
+            current_price["text"] = "£ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 0.83)
 
     currList = ["USD", "EUR", "TRY", "GBP"]
-    Comboc = ttk.Combobox(shares_page, state="readonly", values=currList)
+    Comboc = ttk.Combobox(shares_page, state="readonly", width= 5, values=currList)
     Comboc.set("USD")
-    Comboc.place(x=550, y=120)
-    if Comboc.current(0):
-        current_price.config(float(data[i]['quote']['USD']['price']))
-    if Comboc.current(1):
-        current_price.config(float(data[i]['quote']['USD']['price'])*0.97)
-    if Comboc.current(2):
-        current_price.config(float(data[i]['quote']['USD']['price'])*18.67)
-    if Comboc.current(3):
-        current_price.config(float(data[i]['quote']['USD']['price'])*0.83)
+    Comboc.place(x=500, y=365)
 
-    update_curr = Button(shares_page, text="Update Prices", command=don)
-    update_curr.place(x=650,y =120)
+    update_curr = Button(shares_page, text="Change Currency", command=don2)
+    update_curr.place(x=600,y = 365)
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
