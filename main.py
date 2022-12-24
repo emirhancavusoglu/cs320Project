@@ -119,7 +119,7 @@ def open_Shares_Page():
     print(url)
     headers = {
         'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278'
+        'X-CMC_PRO_API_KEY': '698e8ff5-6293-4eac-a0f3-b8df83d683e9'
     }
     parameters = {
         'symbol': symbolstr
@@ -135,6 +135,7 @@ def open_Shares_Page():
     count = 0
 
     for i in new_currency:
+
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
         name = Label(shares_page, text=data[i]['name'], bg="white")
@@ -201,3 +202,5 @@ def transform(currency):
     return new_currency
 
 root.mainloop()
+#tugberk
+#cil
