@@ -73,9 +73,6 @@ add_btn = Button(root, text='ADD', height=3, width=20, command=continue_adding)
 add_btn.place(relx=0.5, rely=0.50, anchor=CENTER)
 
 new_currency = []
-shares_page = Toplevel(root)
-
-
 def open_Shares_Page():
     shares_page = Toplevel(root)
     shares_page.title("Split Portfolio")
@@ -141,11 +138,6 @@ def open_Shares_Page():
 
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
-        #print(data[i]['name'])
-        #print("${0:.2f}".format(float(data[i]['quote']['USD']['price'])))
-        #print("Rank: {0:.0f}".format(float(data[i]['cmc_rank'])))
-        #print("Current Value: ${0:.2f}".format(float(current_value)))
-
         name = Label(shares_page, text=data[i]['name'], bg="white")
         name.grid(row=row_count, column=0, sticky=N + S + E + W)
 
@@ -175,6 +167,11 @@ def open_Shares_Page():
 
         row_count += 1
         count += 1
+
+
+        data = ""
+        update_button = Button(shares_page, text="Update Prices", command=open_Shares_Page)
+        update_button.grid(row=row_count, column=9, sticky=E + S, padx=10, pady=10)
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
@@ -207,3 +204,5 @@ def transform(currency):
     return new_currency
 
 root.mainloop()
+#tugberk
+#cil
