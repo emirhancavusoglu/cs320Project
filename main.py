@@ -139,42 +139,47 @@ def open_Shares_Page():
 
     row_count = 1
     count = 0
-
+    column_count_value=419.50
     for i in new_currency:
-
         x = 0
 
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
-        name = Label(shares_page, text=data[i]['name'], bg="white", width= 16)
-        name.place(x=0,y=419.45)
+        name = Label(shares_page, text=data[i]['name'], bg="white", width=16)
+        name.place(x=0, y=column_count_value)
 
-        rank = Label(shares_page, text=data[i]['cmc_rank'], width= 11, bg="silver")
-        rank.place(x=120.1,y=419.45)
+        rank = Label(shares_page, text=data[i]['cmc_rank'], width=12, bg="silver")
+        rank.place(x=120, y=column_count_value)
 
-        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), width= 11, bg="white", )
-        current_price.place(x=200.1,y=419.45)
+        current_price = Label(shares_page, text="${0:.2f}".format(float(data[i]['quote']['USD']['price'])), width=15,
+                              bg="white", )
+        current_price.place(x=205, y=column_count_value)
 
         one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
-                              bg="silver",
+                              bg="silver", width=13,
                               fg=red_green(float(data[i]['quote']['USD']["percent_change_60d"])))
-        one_hr_change.grid(row=row_count, column=5, sticky=N + S + E + W)
+        one_hr_change.place(x=315, y=column_count_value)
 
         tf_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_24h'])),
-                                 bg="white",
-                                 fg=red_green(float(data[i]['quote']['USD']["percent_change_24h"])))
-        tf_hr_change.grid(row=row_count, column=6, sticky=N + S + E + W)
+                             bg="white", width=14,
+                             fg=red_green(float(data[i]['quote']['USD']["percent_change_24h"])))
+        tf_hr_change.place(x=410, y=column_count_value)
 
-        seven_day_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_7d'])),
-                                     bg="silver",
-                                     fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
-        seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
+        seven_day_change = Label(shares_page,
+                                 text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_7d'])),
+                                 bg="silver", width=15,
+                                 fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
+        seven_day_change.place(x=510, y=column_count_value)
 
-        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="white")
-        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
+        amount_value = Label(shares_page, text="{0:.2f}".format(amount[count]), width=14, bg="white")
+        amount_value.place(x=610, y=column_count_value)
 
+        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), width=15, bg="silver")
+        current_value.place(x=690, y=column_count_value)
+
+        column_count_value += 20
         row_count += 1
-        count += 1
+        count+=1
 
         # Creating dataset
         def showpi():
@@ -183,7 +188,7 @@ def open_Shares_Page():
             plt.show()
 
         pie_button = Button(shares_page, text="Pie Chart", command=showpi)
-        pie_button.place(x=260, y=365)
+        pie_button.place(x=360, y=365)
 
         def showFuturePrice():
             global futurePrice
@@ -231,13 +236,13 @@ def open_Shares_Page():
         webview.start()
 
     showsNews_button = Button(shares_page, text="Show News", command=showNews)
-    showsNews_button.place(x=165, y=365)
+    showsNews_button.place(x=210, y=365)
     def don(event=None):
         shares_page.destroy()
         open_Shares_Page()
 
     update_button = Button(shares_page, text="Update Prices", command=don)
-    update_button.place(x=380, y=365)
+    update_button.place(x=480, y=365)
 
     def don2(event=None):
         xx = Comboc.current()
@@ -253,10 +258,10 @@ def open_Shares_Page():
     currList = ["USD", "EUR", "TRY", "GBP"]
     Comboc = ttk.Combobox(shares_page, state="readonly", width= 5, values=currList)
     Comboc.set("USD")
-    Comboc.place(x=500, y=365)
+    Comboc.place(x=620, y=368)
 
     update_curr = Button(shares_page, text="Change Currency", command=don2)
-    update_curr.place(x=600,y = 365)
+    update_curr.place(x=680,y = 365)
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
