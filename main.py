@@ -1,4 +1,6 @@
 import tkinter
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import ttk
@@ -15,7 +17,7 @@ import json
 import pprint
 import os
 import csv
-
+import pandas as pd
 
 def red_green(amount):
     if amount >= 0:
@@ -66,7 +68,7 @@ def continue_adding():
             print("sa")
         else:
             sum = int(en2.get())+amount[index]
-            amount[index]= sum;
+            amount[index]= sum
             print(currency, amount)
             Combo.set("")
             en2.delete(0, END)
@@ -112,8 +114,11 @@ def open_Shares_Page():
     header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", font="Verdana 8 bold")
     header_7_day_change.grid(row=0, column=7, sticky=N + S + E + W)
 
-    header_current_value = Label(shares_page, text="Current Value", bg="white", font="Verdana 8 bold")
-    header_current_value.grid(row=0, column=8, sticky=N + S + E + W)
+    header_amount=Label(shares_page,text="Amount",bg="white", font="Verdana 8 bold")
+    header_amount.grid(row=0, column=8, sticky=N + S + E + W)
+
+    header_current_value = Label(shares_page, text="Current Value", bg="silver", font="Verdana 8 bold")
+    header_current_value.grid(row=0, column=9, sticky=N + S + E + W)
 
     symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
@@ -149,6 +154,7 @@ def open_Shares_Page():
 
     for i in new_currency:
 
+
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
         name = Label(shares_page, text=data[i]['name'], bg="white")
@@ -175,8 +181,11 @@ def open_Shares_Page():
                                      fg=red_green(float(data[i]['quote']['USD']["percent_change_7d"])))
         seven_day_change.grid(row=row_count, column=7, sticky=N + S + E + W)
 
-        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="white")
-        current_value.grid(row=row_count, column=8, sticky=N + S + E + W)
+        amountLabel = Label(shares_page,text="{0:.2f}".format(amount[count]), bg="white")
+        amountLabel.grid(row=row_count,column=8,sticky=N + S + E + W)
+
+        current_value = Label(shares_page, text="${0:.2f}".format(float(current_value)), bg="silver")
+        current_value.grid(row=row_count, column=9, sticky=N + S + E + W)
 
         row_count += 1
         count += 1
