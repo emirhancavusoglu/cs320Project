@@ -40,7 +40,7 @@ lb2 = Label(root, text="Currency", font=("arial", 12))
 lb2.place(x=135, y=118)
 
 # combobox
-currencylist = ["BTC", "Ethereum", "BNB", "XRP", "DogeCoin", "LightCoin", "Cardano", "Solana", "Shiba Inu", "Polkadot"]
+currencylist = ["BTC", "ETH", "BNB", "XRP", "DOGE", "LTC", "ADA", "SOL", "SHIB", "DOT"]
 Combo = ttk.Combobox(root, state="readonly", values=currencylist)
 Combo.place(x=240, y=118)
 
@@ -109,7 +109,7 @@ def open_Shares_Page():
                           'ENJ,DCR,MKR,ETC,GRT,COMP,STX,NEAR,SNX,ZIL,BAT,LEO,SUSHI',
                           'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
                           'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
-                          'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
+                          'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX,SHIB'))
 
 
     symbol_list = symbolstr.split(',')
@@ -189,17 +189,17 @@ def transform(currency):
         if val == 3:
             new_currency.append("XRP")
         if val == 4:
-            new_currency.append("DogeCoin")
+            new_currency.append("DOGE")
         if val == 5:
-            new_currency.append("LightCoin")
+            new_currency.append("LTC")
         if val == 6:
-            new_currency.append("Cardano")
+            new_currency.append("ADA")
         if val == 7:
-            new_currency.append("Solana")
+            new_currency.append("SOL")
         if val == 8:
-            new_currency.append("Shiba Inu")
+            new_currency.append("SHIB")
         if val == 9:
-            new_currency.append("Polkadot")
+            new_currency.append("DOT")
     return new_currency
 
 root.mainloop()
