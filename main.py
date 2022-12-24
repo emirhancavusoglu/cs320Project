@@ -1,17 +1,14 @@
-
 from tkinter import *
 from tkinter import ttk
 from requests import Request, Session
 import json
 import os
 
-
 def red_green(amount):
     if amount >= 0:
         return "green"
     else:
         return "red"
-
 
 root = Tk()
 root.title("Split Portfolio")
@@ -148,7 +145,7 @@ def open_Shares_Page():
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
         name = Label(shares_page, text=data[i]['name'], bg="white")
-        name.grid(row=row_count, column=0, sticky=N + S + E + W)
+        name.place(x=0,y=410)
 
         rank = Label(shares_page, text=data[i]['cmc_rank'], bg="silver")
         rank.grid(row=row_count, column=1, sticky=N + S + E + W)
@@ -185,12 +182,11 @@ def open_Shares_Page():
             futurePanel.resizable(width=False, height=False)
             hss = Label(futurePanel, text="Estimated Future Price", bg="white", font="Verdana 8 bold")
             hss.grid(row=0, column=0, sticky=N + S + E + W)
-            row_count_future = 0
             column_count_future = 15
             for i in new_currency:
-                futurePrice = float(data[i]['quote']['USD']['price']) * (
-                            float(data[i]['quote']['USD']['percent_change_7d']) - float(
-                        data[i]['quote']['USD']["percent_change_24h"]))
+                futurePrice = float(data[i]['quote']['USD']['price']) + (float(data[i]['quote']['USD']['price']) *
+                                                                         (float(data[i]['quote']['USD']['percent_change_7d']) +
+                                                                          float(data[i]['quote']['USD']["percent_change_24h"]))/2)
                 if futurePrice < 0:
                     futurePrice = 0
 
