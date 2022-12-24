@@ -59,10 +59,13 @@ amount = []
 
 def continue_adding():
     currency.append(Combo.current())
-    amount.append(int(en2.get()))
-    print(currency, amount)
-    Combo.set("")
-    en2.delete(0, END)
+    if len(en2.get()) == 0:
+        amount.append('0')
+    else:
+        amount.append(int(en2.get()))
+        print(currency, amount)
+        Combo.set("")
+        en2.delete(0, END)
 
 
 # Add Button
@@ -119,7 +122,7 @@ def open_Shares_Page():
     print(url)
     headers = {
         'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '2d444a4e-7303-4551-8276-df65bb537278'
+        'X-CMC_PRO_API_KEY': '698e8ff5-6293-4eac-a0f3-b8df83d683e9'
     }
     parameters = {
         'symbol': symbolstr
@@ -135,6 +138,7 @@ def open_Shares_Page():
     count = 0
 
     for i in new_currency:
+
         current_value = float(amount[count]) * float(data[i]['quote']['USD']['price'])
 
         #print(data[i]['name'])
