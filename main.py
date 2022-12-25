@@ -41,6 +41,43 @@ lb3.place(x=135, y=157)
 en2 = Entry(root, width=23)
 en2.place(x=240, y=160)
 
+def infoShow(event=None):
+    infoPanel = Toplevel(root)
+    infoPanel.title("Guide")
+    infoPanel.geometry("930x200")
+    infoPanel.resizable(width=False, height=False)
+
+    infoLabel1 = Label(infoPanel, text="1- Choose the name of the owned coin.", font="Verdana 8 bold")
+    infoLabel1.place(x=0,y=10)
+
+    infoLabel2 = Label(infoPanel, text="2- Enter the amount of coins owned.", font="Verdana 8 bold")
+    infoLabel2.place(x=0,y=30)
+
+    infoLabel3 = Label(infoPanel, text="3- Then it can be added to the portfolio by clicking the ""ADD"" button. This operation can be done as desired.", font="Verdana 8 bold")
+    infoLabel3.place(x=0,y=50)
+
+    infoLabel4 = Label(infoPanel, text="4- By clicking the ""Continue"" button, you can go to the other page and see the instant data and charts of the coins owned.", font="Verdana 8 bold")
+    infoLabel4.place(x=0,y=70)
+
+    infoLabel5 = Label(infoPanel, text="5- By clicking the ""Estimated Future Price"" button, the estimated future prices of the selected coins can be seen according to our algorithm.", font="Verdana 8 bold")
+    infoLabel5.place(x=0,y=90)
+
+    infoLabel6 = Label(infoPanel, text="6- By clicking the ""Show News"" button, the news of the coins can be seen.", font="Verdana 8 bold")
+    infoLabel6.place(x=0,y=110)
+
+    infoLabel7 = Label(infoPanel, text="7- By clicking the ""Pie Chart"" button, the amount of coins in the portfolio can be seen on the pie chart.", font="Verdana 8 bold")
+    infoLabel7.place(x=0,y=130)
+
+    infoLabel8 = Label(infoPanel, text="8- By pressing the ""Update Prices"" button, the price of the coins is updated.", font="Verdana 8 bold")
+    infoLabel8.place(x=0,y=150)
+
+    infoLabel9 = Label(infoPanel, text="9- By pressing the ""Change Currency"" button, the values of the coins can be seen according to the selected currency.", font="Verdana 8 bold")
+    infoLabel9.place(x=0,y=170)
+
+
+info_button = Button(root, text="HOW TO USE", height=3, width=20, command=infoShow)
+info_button.place(relx=0.5, rely=0.80, anchor=CENTER)
+
 # If several currencies will be added
 currency = []
 amount = []
