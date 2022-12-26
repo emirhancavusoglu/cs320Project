@@ -1,17 +1,23 @@
+import datetime
 from tkinter import *
 from tkinter import ttk
+
+import requests
 from matplotlib import pyplot as plt
-import numpy as np
 from requests import Request, Session
 import json
 import os
 import webview
+import pandas as pd
+
+
 
 def red_green(amount):
     if amount >= 0:
         return "green"
     else:
         return "red"
+
 
 root = Tk()
 root.title("Split Portfolio")
@@ -41,6 +47,7 @@ lb3.place(x=135, y=157)
 en2 = Entry(root, width=23)
 en2.place(x=240, y=160)
 
+
 def infoShow(event=None):
     infoPanel = Toplevel(root)
     infoPanel.title("Guide")
@@ -48,31 +55,44 @@ def infoShow(event=None):
     infoPanel.resizable(width=False, height=False)
 
     infoLabel1 = Label(infoPanel, text="1- Choose the name of the owned coin.", font="Verdana 8 bold")
-    infoLabel1.place(x=0,y=10)
+    infoLabel1.place(x=0, y=10)
 
     infoLabel2 = Label(infoPanel, text="2- Enter the amount of coins owned.", font="Verdana 8 bold")
-    infoLabel2.place(x=0,y=30)
+    infoLabel2.place(x=0, y=30)
 
-    infoLabel3 = Label(infoPanel, text="3- Then it can be added to the portfolio by clicking the ""ADD"" button. This operation can be done as desired.", font="Verdana 8 bold")
-    infoLabel3.place(x=0,y=50)
+    infoLabel3 = Label(infoPanel,
+                       text="3- Then it can be added to the portfolio by clicking the ""ADD"" button. This operation can be done as desired.",
+                       font="Verdana 8 bold")
+    infoLabel3.place(x=0, y=50)
 
-    infoLabel4 = Label(infoPanel, text="4- By clicking the ""Continue"" button, you can go to the other page and see the instant data and charts of the coins owned.", font="Verdana 8 bold")
-    infoLabel4.place(x=0,y=70)
+    infoLabel4 = Label(infoPanel,
+                       text="4- By clicking the ""Continue"" button, you can go to the other page and see the instant data and charts of the coins owned.",
+                       font="Verdana 8 bold")
+    infoLabel4.place(x=0, y=70)
 
-    infoLabel5 = Label(infoPanel, text="5- By clicking the ""Estimated Future Price"" button, the estimated future prices of the selected coins can be seen according to our algorithm.", font="Verdana 8 bold")
-    infoLabel5.place(x=0,y=90)
+    infoLabel5 = Label(infoPanel,
+                       text="5- By clicking the ""Estimated Future Price"" button, the estimated future prices of the selected coins can be seen according to our algorithm.",
+                       font="Verdana 8 bold")
+    infoLabel5.place(x=0, y=90)
 
-    infoLabel6 = Label(infoPanel, text="6- By clicking the ""Show News"" button, the news of the coins can be seen.", font="Verdana 8 bold")
-    infoLabel6.place(x=0,y=110)
+    infoLabel6 = Label(infoPanel, text="6- By clicking the ""Show News"" button, the news of the coins can be seen.",
+                       font="Verdana 8 bold")
+    infoLabel6.place(x=0, y=110)
 
-    infoLabel7 = Label(infoPanel, text="7- By clicking the ""Pie Chart"" button, the amount of coins in the portfolio can be seen on the pie chart.", font="Verdana 8 bold")
-    infoLabel7.place(x=0,y=130)
+    infoLabel7 = Label(infoPanel,
+                       text="7- By clicking the ""Pie Chart"" button, the amount of coins in the portfolio can be seen on the pie chart.",
+                       font="Verdana 8 bold")
+    infoLabel7.place(x=0, y=130)
 
-    infoLabel8 = Label(infoPanel, text="8- By pressing the ""Update Prices"" button, the price of the coins is updated.", font="Verdana 8 bold")
-    infoLabel8.place(x=0,y=150)
+    infoLabel8 = Label(infoPanel,
+                       text="8- By pressing the ""Update Prices"" button, the price of the coins is updated.",
+                       font="Verdana 8 bold")
+    infoLabel8.place(x=0, y=150)
 
-    infoLabel9 = Label(infoPanel, text="9- By pressing the ""Change Currency"" button, the values of the coins can be seen according to the selected currency.", font="Verdana 8 bold")
-    infoLabel9.place(x=0,y=170)
+    infoLabel9 = Label(infoPanel,
+                       text="9- By pressing the ""Change Currency"" button, the values of the coins can be seen according to the selected currency.",
+                       font="Verdana 8 bold")
+    infoLabel9.place(x=0, y=170)
 
 
 info_button = Button(root, text="HOW TO USE", height=3, width=20, command=infoShow)
@@ -107,12 +127,13 @@ def continue_adding():
             en2.delete(0, END)
 
 
-
 # Add Button
 add_btn = Button(root, text='ADD', height=3, width=20, command=continue_adding)
 add_btn.place(relx=0.5, rely=0.50, anchor=CENTER)
 
 new_currency = []
+
+
 def open_Shares_Page():
     shares_page = Toplevel(root)
     shares_page.title("Split Portfolio")
@@ -121,29 +142,29 @@ def open_Shares_Page():
     new_currency = transform(currency)
     print(new_currency)
 
-    header_name = Label(shares_page, text="Name", bg="white", width= 15, font="Verdana 8 bold")
-    header_name.place(x=0,y=400)
+    header_name = Label(shares_page, text="Name", bg="white", width=15, font="Verdana 8 bold")
+    header_name.place(x=0, y=400)
 
-    header_rank = Label(shares_page, text="Rank", bg="silver", width= 10, font="Verdana 8 bold")
-    header_rank.place(x=120,y=400)
+    header_rank = Label(shares_page, text="Rank", bg="silver", width=10, font="Verdana 8 bold")
+    header_rank.place(x=120, y=400)
 
     header_current_price = Label(shares_page, text="Current Price", bg="white", width=13, font="Verdana 8 bold")
-    header_current_price.place(x=205,y=400)
+    header_current_price.place(x=205, y=400)
 
     header_1_hr_change = Label(shares_page, text="1 HR Change", bg="silver", width=12, font="Verdana 8 bold")
-    header_1_hr_change.place(x=315,y=400)
+    header_1_hr_change.place(x=315, y=400)
 
     header_24_hr_change = Label(shares_page, text="24 HR Change", bg="white", width=12, font="Verdana 8 bold")
-    header_24_hr_change.place(x=410,y=400)
+    header_24_hr_change.place(x=410, y=400)
 
     header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", width=12, font="Verdana 8 bold")
-    header_7_day_change.place(x=510,y=400)
+    header_7_day_change.place(x=510, y=400)
 
-    header_amount = Label(shares_page, text="Amount", bg="white", width= 10, font="Verdana 8 bold")
-    header_amount.place(x=610,y=400)
+    header_amount = Label(shares_page, text="Amount", bg="white", width=10, font="Verdana 8 bold")
+    header_amount.place(x=610, y=400)
 
     header_current_value = Label(shares_page, text="Current Value", bg="silver", width=13, font="Verdana 8 bold")
-    header_current_value.place(x=690,y=400)
+    header_current_value.place(x=690, y=400)
 
     symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,SHIB,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
@@ -153,7 +174,6 @@ def open_Shares_Page():
                           'MATIC,BTG,NEXO,TFUEL,ZRX,UST,CEL,MANA,YFI,UMA,WAVES,RVN',
                           'ONT,ICX,QTUM,ONE,KCS,OMG,FLOW,OKB,BNT,HNT,SC,DGB,RSR,DENT',
                           'ANKR,REV,NPXS,VGX,FTM,CHSB,REN,IOST,BTMX,CELO,PAX,CFX'))
-
 
     symbol_list = symbolstr.split(',')
     key = os.environ.get('')
@@ -170,13 +190,12 @@ def open_Shares_Page():
     session = Session()
     session.headers.update(headers)
 
-
     response = session.get(url, params=parameters)
     data = json.loads(response.text)['data']
 
     row_count = 1
     count = 0
-    column_count_value=419.50
+    column_count_value = 419.50
     for i in new_currency:
         x = 0
 
@@ -216,7 +235,7 @@ def open_Shares_Page():
 
         column_count_value += 20
         row_count += 1
-        count+=1
+        count += 1
 
         # Creating dataset
         def showpi():
@@ -265,8 +284,33 @@ def open_Shares_Page():
                 price_button_price.place(x=240, y=column_count_future)
                 column_count_future += 20
 
+
+    def get_market_chart(coin_id, vs_currency='usd', days='max', interval='daily'):
+
+        url = f'https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart'
+        payload = {'vs_currency': vs_currency, 'days': days, 'interval': interval}
+        response = requests.get(url, params=payload)
+        data = response.json()
+
+        timestamp_list, price_list = [], []
+
+        for price in data['prices']:
+            timestamp_list.append(datetime.datetime.fromtimestamp(price[0] / 1000))
+            price_list.append(price[1])
+        raw_data = {
+            'timestamp': timestamp_list,
+            'price': price_list
+        }
+        df = pd.DataFrame(raw_data)
+        return df
+
+    history_combo = ["BTC", "ETH", "BNB", "XRP", "DOGE", "DOT", "LTC", "SHIB", "SOL", "ADA"]
+
     future_price_button = Button(shares_page, text="Estimated Future Price", command=showFuturePrice)
     future_price_button.place(x=15, y=365)
+
+    # for i in history_combo:
+    # if
 
     def showNews(event=None):
         webview.create_window('Coin News', 'https://coinmarketcap.com/headlines/news/')
@@ -274,9 +318,43 @@ def open_Shares_Page():
 
     showsNews_button = Button(shares_page, text="Show News", command=showNews)
     showsNews_button.place(x=210, y=365)
+
     def don(event=None):
         shares_page.destroy()
         open_Shares_Page()
+
+    def sikikeren(event=None):
+        x = ''
+        if Comboy.current() == 0:
+            x += 'bitcoin'
+        if Comboy.current() == 1:
+            x = 'ethereum'
+        if Comboy.current() == 2:
+            x = 'binancecoin'
+        if Comboy.current() == 3:
+            x = 'ripple'
+        if Comboy.current() == 4:
+            x = 'dogecoin'
+        if Comboy.current() == 5:
+            x = 'polkadot'
+        if Comboy.current() == 6:
+            x = 'litecoin'
+        if Comboy.current() == 7:
+            x = 'shiba-inu'
+        if Comboy.current() == 8:
+            x = 'solana'
+        if Comboy.current() == 9:
+            x = 'cardano'
+        market_info = get_market_chart(x, 'usd', '30')
+        market_info.plot(y='price', x='timestamp', color='#4285F4')
+        plt.show()
+
+    Comboy = ttk.Combobox(shares_page, state="readonly", width=10, values=history_combo)
+    Comboy.set("BTC")
+    Comboy.place(x=620, y=340)
+
+    showHist = Button(shares_page, text="Coin Price History", command=sikikeren)
+    showHist.place(x=480, y=340)
 
     update_button = Button(shares_page, text="Update Prices", command=don)
     update_button.place(x=480, y=365)
@@ -292,15 +370,18 @@ def open_Shares_Page():
                                       width=15,
                                       bg="white", )
                 current_price.place(x=205, y=column_count_value2)
-                current_value = Label(shares_page, text="$ {0:.2f}".format(float(amount[count]) * values), width=15, bg="silver")
+                current_value = Label(shares_page, text="$ {0:.2f}".format(float(amount[count]) * values), width=15,
+                                      bg="silver")
                 current_value.place(x=690, y=column_count_value2)
             if xx == 1:
                 values = float(data[i]['quote']['USD']['price'])
-                current_price = Label(shares_page, text="€ {0:.2f}".format(float(data[i]['quote']['USD']['price'])*0.97),
+                current_price = Label(shares_page,
+                                      text="€ {0:.2f}".format(float(data[i]['quote']['USD']['price']) * 0.97),
                                       width=15,
                                       bg="white", )
                 current_price.place(x=205, y=column_count_value2)
-                current_value = Label(shares_page, text="€ {0:.2f}".format(float(amount[count]) * values*0.97), width=15, bg="silver")
+                current_value = Label(shares_page, text="€ {0:.2f}".format(float(amount[count]) * values * 0.97),
+                                      width=15, bg="silver")
                 current_value.place(x=690, y=column_count_value2)
             if xx == 2:
                 values = float(data[i]['quote']['USD']['price'])
@@ -309,7 +390,8 @@ def open_Shares_Page():
                                       width=15,
                                       bg="white", )
                 current_price.place(x=205, y=column_count_value2)
-                current_value = Label(shares_page, text="₺ {0:.2f}".format(float(amount[count]) * values*18.67), width=15, bg="silver")
+                current_value = Label(shares_page, text="₺ {0:.2f}".format(float(amount[count]) * values * 18.67),
+                                      width=15, bg="silver")
                 current_value.place(x=690, y=column_count_value2)
             if xx == 3:
                 values = float(data[i]['quote']['USD']['price'])
@@ -318,23 +400,24 @@ def open_Shares_Page():
                                       width=15,
                                       bg="white", )
                 current_price.place(x=205, y=column_count_value2)
-                current_value = Label(shares_page, text="£ {0:.2f}".format((float(amount[count]) * values*0.83)), width=15, bg="silver")
+                current_value = Label(shares_page, text="£ {0:.2f}".format((float(amount[count]) * values * 0.83)),
+                                      width=15, bg="silver")
                 current_value.place(x=690, y=column_count_value2)
             column_count_value2 += 20
             count += 1
 
     currList = ["USD", "EUR", "TRY", "GBP"]
-    Comboc = ttk.Combobox(shares_page, state="readonly", width= 5, values=currList)
+    Comboc = ttk.Combobox(shares_page, state="readonly", width=5, values=currList)
     Comboc.set("USD")
     Comboc.place(x=620, y=368)
 
     update_curr = Button(shares_page, text="Change Currency", command=don2)
-    update_curr.place(x=680,y = 365)
+    update_curr.place(x=680, y=365)
+
 
 # Continue Button
 continue_btn = Button(root, text='CONTINUE', height=3, width=20, command=open_Shares_Page)
 continue_btn.place(relx=0.5, rely=0.65, anchor=CENTER)
-
 
 
 def transform(currency):
