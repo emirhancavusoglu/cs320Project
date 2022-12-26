@@ -137,34 +137,34 @@ new_currency = []
 def open_Shares_Page():
     shares_page = Toplevel(root)
     shares_page.title("Split Portfolio")
-    shares_page.geometry("800x800")
+    shares_page.geometry("800x400")
     shares_page.resizable(width=False, height=False)
     new_currency = transform(currency)
     print(new_currency)
 
     header_name = Label(shares_page, text="Name", bg="white", width=15, font="Verdana 8 bold")
-    header_name.place(x=0, y=400)
+    header_name.place(x=0, y=0)
 
     header_rank = Label(shares_page, text="Rank", bg="silver", width=10, font="Verdana 8 bold")
-    header_rank.place(x=120, y=400)
+    header_rank.place(x=120, y=0)
 
     header_current_price = Label(shares_page, text="Current Price", bg="white", width=13, font="Verdana 8 bold")
-    header_current_price.place(x=205, y=400)
+    header_current_price.place(x=205, y=0)
 
     header_1_hr_change = Label(shares_page, text="1 HR Change", bg="silver", width=12, font="Verdana 8 bold")
-    header_1_hr_change.place(x=315, y=400)
+    header_1_hr_change.place(x=315, y=0)
 
     header_24_hr_change = Label(shares_page, text="24 HR Change", bg="white", width=12, font="Verdana 8 bold")
-    header_24_hr_change.place(x=410, y=400)
+    header_24_hr_change.place(x=410, y=0)
 
     header_7_day_change = Label(shares_page, text="7 Day Change", bg="silver", width=12, font="Verdana 8 bold")
-    header_7_day_change.place(x=510, y=400)
+    header_7_day_change.place(x=510, y=0)
 
     header_amount = Label(shares_page, text="Amount", bg="white", width=10, font="Verdana 8 bold")
-    header_amount.place(x=610, y=400)
+    header_amount.place(x=610, y=0)
 
     header_current_value = Label(shares_page, text="Current Value", bg="silver", width=13, font="Verdana 8 bold")
-    header_current_value.place(x=690, y=400)
+    header_current_value.place(x=690, y=0)
 
     symbolstr = ','.join(('BTC,ETH,BNB,XRP,USDT,ADA,DOT,UNI,LTC,LINK,SHIB,XLM,BCH',
                           'THETA,FIL,USDC,TRX,DOGE,WBTC,VET,SOL,KLAY,EOS,XMR,LUNA',
@@ -195,7 +195,7 @@ def open_Shares_Page():
 
     row_count = 1
     count = 0
-    column_count_value = 419.50
+    column_count_value = 19.50
     for i in new_currency:
         x = 0
 
@@ -211,9 +211,9 @@ def open_Shares_Page():
                               bg="white", )
         current_price.place(x=205, y=column_count_value)
 
-        one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_60d'])),
+        one_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_1h'])),
                               bg="silver", width=13,
-                              fg=red_green(float(data[i]['quote']['USD']["percent_change_60d"])))
+                              fg=red_green(float(data[i]['quote']['USD']["percent_change_1h"])))
         one_hr_change.place(x=315, y=column_count_value)
 
         tf_hr_change = Label(shares_page, text="{0:.2f}%".format(float(data[i]['quote']['USD']['percent_change_24h'])),
@@ -266,9 +266,9 @@ def open_Shares_Page():
 
             column_count_future = 60
             for i in new_currency:
-                futurePrice = float(data[i]['quote']['USD']['price']) * (
-                        float(data[i]['quote']['USD']['percent_change_7d']) - float(
-                    data[i]['quote']['USD']["percent_change_24h"]))
+                futurePrice = float(data[i]['quote']['USD']['price']) + (float(data[i]['quote']['USD']['price']) * ((
+                        float(data[i]['quote']['USD']['percent_change_7d']) + float(
+                    data[i]['quote']['USD']["percent_change_24h"]))/2))
                 if futurePrice < 0:
                     futurePrice = 0
 
@@ -323,7 +323,7 @@ def open_Shares_Page():
         shares_page.destroy()
         open_Shares_Page()
 
-    def sikikeren(event=None):
+    def hist_data(event=None):
         x = ''
         if Comboy.current() == 0:
             x += 'bitcoin'
@@ -351,10 +351,10 @@ def open_Shares_Page():
 
     Comboy = ttk.Combobox(shares_page, state="readonly", width=10, values=history_combo)
     Comboy.set("BTC")
-    Comboy.place(x=620, y=340)
+    Comboy.place(x=130, y=335)
 
-    showHist = Button(shares_page, text="Coin Price History", command=sikikeren)
-    showHist.place(x=480, y=340)
+    showHist = Button(shares_page, text="Coin Price History", command=hist_data)
+    showHist.place(x=15, y=334)
 
     update_button = Button(shares_page, text="Update Prices", command=don)
     update_button.place(x=480, y=365)
